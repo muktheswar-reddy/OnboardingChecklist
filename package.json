@@ -1,0 +1,27 @@
+{
+  "name": "onboarding-checklist",
+  "version": "1.0.0",
+  "description": "Smart Employee Onboarding & Workforce Readiness Management Platform",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "build": "cd client && npm run build",
+    "test": "cd server && npm test && cd ../client && npm test",
+    "seed": "cd server && npm run seed",
+    "lint": "cd client && npm run lint && cd ../server && npm run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "onboarding",
+    "hr",
+    "employee",
+    "management",
+    "saas"
+  ],
+  "author": "SURAM MUKTHESWAR REDDY",
+  "license": "MIT"
+}
+
