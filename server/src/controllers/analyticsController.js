@@ -18,7 +18,26 @@ const getOverview = async (req, res) => {
     getOverviewStats(),
     getAverageOnboardingDuration(),
   ]);
-  return successResponse(res, { ...overview, averageOnboardingDuration: avgDuration }, 'Overview stats retrieved');
+
+  const responseData = {
+    ...overview,
+    totalEmployees: overview.employees.total,
+    activeEmployees: overview.employees.active,
+    onboardingEmployees: overview.employees.onboarding,
+    completedEmployees: overview.onboardings.completed,
+    inProgressEmployees: overview.onboardings.inProgress,
+    delayedEmployees: overview.onboardings.delayed,
+    totalOnboardings: overview.onboardings.total,
+    totalTasks: overview.tasks.total,
+    completedTasks: overview.tasks.completed,
+    blockedTasks: overview.tasks.blocked,
+    overdueTasks: overview.tasks.overdue,
+    tasksDueToday: overview.tasks.dueToday,
+    averageReadinessScore: overview.tasks.completionRate,
+    averageOnboardingDuration: avgDuration,
+  };
+
+  return successResponse(res, responseData, 'Overview stats retrieved');
 };
 
 /**
@@ -27,7 +46,21 @@ const getOverview = async (req, res) => {
  */
 const getDepartments = async (req, res) => {
   const stats = await getDepartmentStats();
-  return successResponse(res, stats, 'Department stats retrieved');
+  const mapped = stats.map((s) => ({
+    ...s,
+    _id: s.department?.id || s.department,
+    name: s.department?.name || s.name || 'Department',
+    department: s.department?.name || s.name || 'Department',
+    totalCount: s.tasks?.total || 0,
+    completedCount: s.onboardings?.completed || Math.max(0, (s.tasks?.total || 0) - (s.tasks?.blocked || 0)),
+    inProgressCount: s.onboardings?.inProgress || 0,
+    delayedCount: s.onboardings?.delayed || 0,
+    blockedCount: s.tasks?.blocked || 0,
+    completionRate: (s.tasks?.total || 0) > 0
+      ? Math.round((Math.max(0, (s.tasks.total - (s.tasks.blocked || 0))) / s.tasks.total) * 100)
+      : 0,
+  }));
+  return successResponse(res, mapped, 'Department stats retrieved');
 };
 
 /**

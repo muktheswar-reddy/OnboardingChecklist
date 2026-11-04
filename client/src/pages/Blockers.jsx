@@ -20,7 +20,9 @@ export default function Blockers() {
     setLoading(true)
     try {
       const res = await taskService.getTasks({ status: 'blocked', limit: 50 })
-      setBlockedTasks(res.data?.tasks || res.data || [])
+      const payload = res?.data !== undefined ? res.data : res
+      const list = Array.isArray(payload) ? payload : (payload?.tasks || payload?.data || [])
+      setBlockedTasks(Array.isArray(list) ? list : [])
     } catch (err) {
       console.error('Failed to load blocked tasks:', err)
     } finally {

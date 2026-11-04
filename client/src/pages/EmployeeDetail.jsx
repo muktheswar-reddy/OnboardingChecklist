@@ -36,16 +36,21 @@ export default function EmployeeDetail() {
     setLoading(true)
     try {
       const empRes = await employeeService.getEmployee(id)
-      const empData = empRes.data?.employee || empRes.data
+      const empPayload = empRes?.data !== undefined ? empRes.data : empRes
+      const empData = empPayload?.employee || empPayload
       setEmployee(empData)
 
       // Fetch tasks for this employee
       const taskRes = await taskService.getTasks({ employee: id, limit: 100 })
-      setTasks(taskRes.data?.tasks || taskRes.data || [])
+      const taskPayload = taskRes?.data !== undefined ? taskRes.data : taskRes
+      const taskList = Array.isArray(taskPayload) ? taskPayload : (taskPayload?.tasks || taskPayload?.data || [])
+      setTasks(Array.isArray(taskList) ? taskList : [])
 
       // Fetch audit logs for this employee
       const actRes = await api.get(`/activity?entityId=${id}`)
-      setActivities(actRes.data?.data?.logs || actRes.data?.logs || [])
+      const actPayload = actRes?.data !== undefined ? actRes.data : actRes
+      const actList = actPayload?.logs || actPayload?.data?.logs || (Array.isArray(actPayload) ? actPayload : [])
+      setActivities(Array.isArray(actList) ? actList : [])
     } catch (err) {
       console.error('Failed to load employee details:', err)
     } finally {

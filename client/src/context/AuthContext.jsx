@@ -18,8 +18,9 @@ export function AuthProvider({ children }) {
 
   const fetchMe = useCallback(async () => {
     try {
-      const data = await authService.getMe()
-      setUser(data)
+      const res = await authService.getMe()
+      const userData = res?.data?.user || res?.data || res?.user || res
+      setUser(userData)
     } catch {
       setUser(null)
       setToken(null)
@@ -39,22 +40,30 @@ export function AuthProvider({ children }) {
   }, [token, fetchMe])
 
   const login = async (email, password) => {
-    const data = await authService.login(email, password)
-    const { token: newToken, user: newUser } = data
-    localStorage.setItem('token', newToken)
-    api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
-    setToken(newToken)
-    setUser(newUser)
+    const res = await authService.login(email, password)
+    const payload = res?.data || res
+    const newToken = payload?.token || res?.token
+    const newUser = payload?.user || res?.user || payload
+    if (newToken) {
+      localStorage.setItem('token', newToken)
+      api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+      setToken(newToken)
+      setUser(newUser)
+    }
     return newUser
   }
 
   const register = async (formData) => {
-    const data = await authService.register(formData)
-    const { token: newToken, user: newUser } = data
-    localStorage.setItem('token', newToken)
-    api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
-    setToken(newToken)
-    setUser(newUser)
+    const res = await authService.register(formData)
+    const payload = res?.data || res
+    const newToken = payload?.token || res?.token
+    const newUser = payload?.user || res?.user || payload
+    if (newToken) {
+      localStorage.setItem('token', newToken)
+      api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+      setToken(newToken)
+      setUser(newUser)
+    }
     return newUser
   }
 

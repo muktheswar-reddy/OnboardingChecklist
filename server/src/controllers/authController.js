@@ -18,12 +18,24 @@ const register = async (req, res) => {
     return errorResponse(res, 'An account with this email already exists', 409);
   }
 
+  let deptId = null;
+  if (department) {
+    const mongoose = require('mongoose');
+    if (mongoose.Types.ObjectId.isValid(department)) {
+      deptId = department;
+    } else {
+      const Department = require('../models/Department');
+      const foundDept = await Department.findOne({ name: new RegExp(`^${department}$`, 'i') });
+      if (foundDept) deptId = foundDept._id;
+    }
+  }
+
   const user = await User.create({
     name,
     email,
     passwordHash: password,
     role: role || 'employee',
-    department: department || null,
+    department: deptId,
   });
 
   const token = generateToken(user._id, user.role);

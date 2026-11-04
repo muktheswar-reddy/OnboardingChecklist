@@ -21,9 +21,9 @@ export default function MyTasks() {
     try {
       // Get all tasks (can filter by owner on server or client)
       const res = await taskService.getTasks({ limit: 100 })
-      const allTasks = res.data?.tasks || res.data || []
-      // If user is employee or specific role, show tasks relevant to them
-      setTasks(allTasks)
+      const payload = res?.data !== undefined ? res.data : res
+      const allTasks = Array.isArray(payload) ? payload : (payload?.tasks || payload?.data || [])
+      setTasks(Array.isArray(allTasks) ? allTasks : [])
     } catch (err) {
       console.error('Failed to load my tasks:', err)
     } finally {

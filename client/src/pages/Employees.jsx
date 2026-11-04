@@ -26,10 +26,10 @@ export default function Employees() {
     setLoading(true)
     try {
       const res = await employeeService.getEmployees(filters)
-      if (res.data) {
-        setEmployees(res.data.employees || res.data || [])
-        setTotalPages(res.data.totalPages || 1)
-      }
+      const payload = res?.data !== undefined ? res.data : res
+      const empList = Array.isArray(payload) ? payload : (payload?.employees || payload?.data || [])
+      setEmployees(Array.isArray(empList) ? empList : [])
+      setTotalPages(res?.pagination?.totalPages || payload?.totalPages || 1)
     } catch (err) {
       console.error('Failed to load employees:', err)
     } finally {

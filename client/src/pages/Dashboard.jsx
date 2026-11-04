@@ -37,20 +37,25 @@ export default function Dashboard() {
         api.get('/activity?limit=6')
       ])
 
-      if (overviewRes.status === 'fulfilled' && overviewRes.value.data) {
-        setOverview(overviewRes.value.data)
+      if (overviewRes.status === 'fulfilled' && overviewRes.value) {
+        const ovData = overviewRes.value.data?.data || overviewRes.value.data || overviewRes.value
+        setOverview(ovData)
       }
-      if (deptRes.status === 'fulfilled' && deptRes.value.data) {
-        setDeptStats(deptRes.value.data)
+      if (deptRes.status === 'fulfilled' && deptRes.value) {
+        const dData = deptRes.value.data?.data || deptRes.value.data || deptRes.value
+        setDeptStats(Array.isArray(dData) ? dData : dData?.departments || [])
       }
-      if (blockedRes.status === 'fulfilled' && blockedRes.value.data) {
-        setBlockedTasks(blockedRes.value.data.tasks || blockedRes.value.data || [])
+      if (blockedRes.status === 'fulfilled' && blockedRes.value) {
+        const bData = blockedRes.value.data?.data || blockedRes.value.data || blockedRes.value
+        setBlockedTasks(bData.tasks || (Array.isArray(bData) ? bData : []))
       }
-      if (tasksRes.status === 'fulfilled' && tasksRes.value.data) {
-        setUpcomingTasks(tasksRes.value.data.tasks || tasksRes.value.data || [])
+      if (tasksRes.status === 'fulfilled' && tasksRes.value) {
+        const tData = tasksRes.value.data?.data || tasksRes.value.data || tasksRes.value
+        setUpcomingTasks(tData.tasks || (Array.isArray(tData) ? tData : []))
       }
-      if (actRes.status === 'fulfilled' && actRes.value.data) {
-        setRecentActivities(actRes.value.data.data?.logs || actRes.value.data.logs || [])
+      if (actRes.status === 'fulfilled' && actRes.value) {
+        const aData = actRes.value.data?.data || actRes.value.data || actRes.value
+        setRecentActivities(aData.logs || (Array.isArray(aData) ? aData : []))
       }
     } catch (err) {
       console.error('Failed to load dashboard data:', err)

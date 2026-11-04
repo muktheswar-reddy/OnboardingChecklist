@@ -22,7 +22,9 @@ export default function Onboarding() {
     setLoading(true)
     try {
       const res = await onboardingService.getOnboardings({ limit: 50 })
-      setOnboardings(res.data?.onboardings || res.data || [])
+      const payload = res?.data !== undefined ? res.data : res
+      const list = Array.isArray(payload) ? payload : (payload?.onboardings || payload?.data || [])
+      setOnboardings(Array.isArray(list) ? list : [])
     } catch (err) {
       console.error('Failed to fetch onboarding records:', err)
     } finally {

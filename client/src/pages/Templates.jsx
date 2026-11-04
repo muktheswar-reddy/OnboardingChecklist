@@ -32,7 +32,9 @@ export default function Templates() {
     setLoading(true)
     try {
       const res = await templateService.getTemplates()
-      setTemplates(res.data?.templates || res.data || [])
+      const payload = res?.data !== undefined ? res.data : res
+      const list = Array.isArray(payload) ? payload : (payload?.templates || payload?.data || [])
+      setTemplates(Array.isArray(list) ? list : [])
     } catch (err) {
       console.error('Failed to load templates:', err)
     } finally {
