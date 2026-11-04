@@ -35,3 +35,4 @@ export default function RoleChart({ data = [] }) {
     </div>
   )
 }
+

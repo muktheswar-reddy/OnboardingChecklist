@@ -67,3 +67,4 @@ export default function EmployeeCard({ employee, onEdit, onDelete }) {
     </div>
   )
 }
+

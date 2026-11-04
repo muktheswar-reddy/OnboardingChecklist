@@ -48,3 +48,4 @@ export default function KPICard({ title, value, change, icon, color = 'primary',
     </div>
   )
 }
+

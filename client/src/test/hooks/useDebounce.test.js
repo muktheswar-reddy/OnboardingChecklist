@@ -31,3 +31,4 @@ describe('useDebounce hook', () => {
     expect(result.current).toBe('second')
   })
 })
+

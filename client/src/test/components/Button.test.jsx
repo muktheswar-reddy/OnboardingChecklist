@@ -21,3 +21,4 @@ describe('Button Component', () => {
     expect(screen.getByText('Disabled Action')).toBeDisabled()
   })
 })
+

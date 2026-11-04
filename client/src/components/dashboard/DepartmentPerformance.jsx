@@ -33,3 +33,4 @@ export default function DepartmentPerformance({ departments = [], loading = fals
     </div>
   )
 }
+

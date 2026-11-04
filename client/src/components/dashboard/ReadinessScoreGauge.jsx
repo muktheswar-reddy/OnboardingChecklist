@@ -71,3 +71,4 @@ export default function ReadinessScoreGauge({ score = 0, title = 'Workforce Read
     </div>
   )
 }
+

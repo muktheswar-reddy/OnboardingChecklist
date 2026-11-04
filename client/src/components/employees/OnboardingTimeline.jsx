@@ -91,3 +91,4 @@ export default function OnboardingTimeline({ onboarding, tasks = [] }) {
     </div>
   )
 }
+

@@ -15,3 +15,4 @@ describe('KPICard Component', () => {
     expect(screen.getByText('+12%')).toBeInTheDocument()
   })
 })
+

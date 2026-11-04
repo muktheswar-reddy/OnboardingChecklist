@@ -380,7 +380,9 @@ const seedData = async () => {
     console.error('❌ Seeding failed with error:', error);
     process.exit(1);
   } finally {
-    await disconnectDB();
+    if (require.main === module) {
+      await disconnectDB();
+    }
   }
 };
 
@@ -389,3 +391,4 @@ if (require.main === module) {
 }
 
 module.exports = seedData;
+

@@ -66,3 +66,4 @@ export default function UpcomingDeadlines({ tasks = [], loading = false }) {
     </div>
   )
 }
+
